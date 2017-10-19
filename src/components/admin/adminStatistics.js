@@ -112,7 +112,7 @@ class AdminStatistics extends Component {
                  * Highcharts
                  */}
 
-                <div class="row card-box">
+                <div className="row card-box">
                     <div id="container-chart"></div>
                 </div>
 

@@ -7,6 +7,10 @@ import axios from 'axios';
 import { setCurrentUserAction } from './actions/authAction';
 import jwt from 'jsonwebtoken';
 //import setAuthorizationToken from './axiosAuthToken';
+import 'react-dates/lib/css/_datepicker.css';
+import 'react-datetime/css/react-datetime.css';
+import 'react-times/css/classic/default.css';
+import 'react-times/css/material/default.css';
 import './App.css';
 
 
@@ -18,6 +22,7 @@ class App extends Component {
     if (localStorage.getItem('jwtoken')) {
       Store.dispatch(setCurrentUserAction(jwt.decode(localStorage.getItem('jwtoken'))));
     }
+    
   }
 
 

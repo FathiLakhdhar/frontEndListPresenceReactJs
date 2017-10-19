@@ -176,6 +176,9 @@ footer {
     background: #eee;
     padding: 4px;
 }
+.form-datetime>*{
+    margin-left: 30px;
+}
 
 .lp-sous-title {
     color: #0399e6;
@@ -212,3 +215,15 @@ footer {
 .btn-link {
     color: #022946;
 }
+
+
+.time_picker_container {
+    width: 175px;
+}
+.preview_container{
+    padding: 0 !important;
+}
+
+.DateInput {
+    width: 175px;
+}    
