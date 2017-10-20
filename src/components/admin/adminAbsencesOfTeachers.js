@@ -3,20 +3,23 @@ import LpTitle from '../lpTitle';
 import 'react-dates/initialize';
 import { SingleDatePicker } from 'react-dates';
 import TimePicker from 'react-times';
+import { isEmpty } from 'lodash';
+import * as moment from 'moment';
 
 
 class AdminAbsencesOfTeachers extends Component {
     constructor() {
         super();
         this.state = {
-            date: null,
-            time1: null,
-            time2: null,
+            errors: {},
+            date: moment(),
+            time1: moment().format("HH:mm"),
+            time2: moment().add(1, 'hours').format("HH:mm"),
             focused: null,
             teachers: [
                 { checked: false, id: 1, firstname: 'fathi', surname: 'lakhdhar', email: 'fathi.lakdhar@yahoo.fr', isPresent: false },
                 { checked: true, id: 2, firstname: 'Cristiano', surname: 'Ronaldo', email: 'cristiano@yahoo.fr', isPresent: true }
-            ]
+            ],
         }
     }
 
@@ -24,8 +27,38 @@ class AdminAbsencesOfTeachers extends Component {
 
     HandleSubmit(e) {
         e.preventDefault();
-        var final_list_presence = this.state.teachers.filter(obj => obj.checked);
-        console.log(final_list_presence);
+        this.setState({ errors: {} });
+        var list = this.filterByChecked();
+        const { errors, isValid } = this.isValid(list);
+        console.log(isValid);
+        if (isValid) {
+            //Action 
+
+        } else {
+            this.setState({ errors });
+        }
+
+        console.log(this.state);
+
+    }
+
+    filterByChecked() { return this.state.teachers.filter(obj => obj.checked); }
+
+    isValid(list) {
+        var errors = {};
+        if (isEmpty(list))
+            errors.list = "List presence is Empty";
+        if (!this.state.date)
+            errors.date = "Select a date";
+        if (!this.state.time1 || !this.state.time2)
+            errors.time = "Select a time";
+
+        if (moment(this.state.time1, "HH:mm").hours() > moment(this.state.time2, "HH:mm").hours()) { errors.time = "Invalid time"; }
+        if ( (moment(this.state.time1, "HH:mm").hours() === moment(this.state.time2, "HH:mm").hours()) && (moment(this.state.time1, "HH:mm").minutes() >= moment(this.state.time2, "HH:mm").minutes()) ){
+            errors.time = "inValid time";
+        }
+
+            return { errors, isValid: isEmpty(errors) };
     }
 
 
@@ -43,12 +76,16 @@ class AdminAbsencesOfTeachers extends Component {
         t.checked = !t.checked;
         var { teachers } = this.state;
         teachers[index].checked = t.checked;
+        teachers[index].isPresent = false;
         this.setState({
             teachers
         })
     }
 
+
     render() {
+
+        var { errors } = this.state;
 
         var ListTeachers = this.state.teachers.map((t, index) =>
             <tr key={t.id} >
@@ -58,13 +95,23 @@ class AdminAbsencesOfTeachers extends Component {
                 <td>{t.surname}</td>
                 <td>{t.email}</td>
                 <td>
-                    <button onClick={this.HandleClick.bind(this, t, index)} className={"btn " + ((t.isPresent) ? "btn-success" : "btn-danger")}>
+                    <button disabled={!t.checked} onClick={this.HandleClick.bind(this, t, index)} className={"btn " + ((t.isPresent) ? "btn-success" : "btn-danger")}>
                         <i className={((t.isPresent) ? "ion-checkmark-round " : " ion-close-round")}></i>
                     </button>
                 </td>
             </tr>
 
         );
+
+        var errorsView = (!isEmpty(errors)) ? (
+            <div className="alert alert-danger">
+                <ul>
+                    {errors.list && <li>{errors.list}</li>}
+                    {errors.date && <li>{errors.date}</li>}
+                    {errors.time && <li>{errors.time}</li>}
+                </ul>
+            </div>
+        ) : (<div></div>);
 
         return (
             <div>
@@ -93,7 +140,11 @@ class AdminAbsencesOfTeachers extends Component {
 
 
                 <form className="form-inline form-datetime" onSubmit={this.HandleSubmit.bind(this)}>
+                    {errorsView}
+
                     <SingleDatePicker
+                        displayFormat="YYYY-MM-DD"
+                        showDefaultInputIcon
                         numberOfMonths={1}
                         daySize={50}
                         date={this.state.date}
@@ -103,23 +154,22 @@ class AdminAbsencesOfTeachers extends Component {
                     />
                     <div className="form-group">
                         <TimePicker
-                            timeMode="12"
                             theme="classic"
                             withoutIcon={true}
                             time={this.state.time1}
                             onTimeChange={time1 => this.setState({ time1 })}
                         />
                     </div>
+                    <i className="ion-arrow-right-c" />
                     <div className="form-group">
                         <TimePicker
-                            timeMode="12"
                             theme="classic"
                             withoutIcon={true}
                             time={this.state.time2}
                             onTimeChange={time2 => this.setState({ time2 })}
                         />
                     </div>
-                    <button type="submit" className="btn btn-lg btn-default">Add</button>
+                    <button type="submit" className="btn btn-lg btn-primary">Add</button>
                 </form>
             </div>
         );
