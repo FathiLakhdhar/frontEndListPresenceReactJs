@@ -5,6 +5,10 @@ import { SingleDatePicker } from 'react-dates';
 import TimePicker from 'react-times';
 import { isEmpty } from 'lodash';
 import * as moment from 'moment';
+import { addListPresenceAction, getAllTeachersAction } from '../../actions/teacherAction';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { logout } from '../../actions/authAction';
 
 
 class AdminAbsencesOfTeachers extends Component {
@@ -16,29 +20,49 @@ class AdminAbsencesOfTeachers extends Component {
             time1: moment().format("HH:mm"),
             time2: moment().add(1, 'hours').format("HH:mm"),
             focused: null,
-            teachers: [
-                { checked: false, id: 1, firstname: 'fathi', surname: 'lakhdhar', email: 'fathi.lakdhar@yahoo.fr', isPresent: false },
-                { checked: true, id: 2, firstname: 'Cristiano', surname: 'Ronaldo', email: 'cristiano@yahoo.fr', isPresent: true }
-            ],
+            teachers: [],
         }
     }
 
-
+    componentDidMount(){
+        this.props.getAllTeachers()
+        .then(result => {
+            let teachers = result.data
+            teachers.map(function(t) {
+                t.checked = false;
+                t.isPresent = false;
+                return t;
+            });
+            this.setState({ teachers })
+        })
+        .catch(e => console.log(e));
+    }
 
     HandleSubmit(e) {
         e.preventDefault();
         this.setState({ errors: {} });
-        var list = this.filterByChecked();
-        const { errors, isValid } = this.isValid(list);
-        console.log(isValid);
+        var lp = this.filterByChecked();
+        const { errors, isValid } = this.isValid(lp);
         if (isValid) {
             //Action 
+            let { date, time1, time2 } = this.state;
+            date = date.format("YYYY-MM-DD");
+            let data = { lp, date, time1, time2 };
+            this.props.newlp(data).then(res => {
+                console.log(res.data);
+                if (res.data.success) {
+                    this.resetTeachersList();
+                }
+            }).catch(e => {
+                if (e.response)
+                    console.log(e.response.data);
+                //this.props.logout();
+            });
 
         } else {
             this.setState({ errors });
         }
 
-        console.log(this.state);
 
     }
 
@@ -54,11 +78,17 @@ class AdminAbsencesOfTeachers extends Component {
             errors.time = "Select a time";
 
         if (moment(this.state.time1, "HH:mm").hours() > moment(this.state.time2, "HH:mm").hours()) { errors.time = "Invalid time"; }
-        if ( (moment(this.state.time1, "HH:mm").hours() === moment(this.state.time2, "HH:mm").hours()) && (moment(this.state.time1, "HH:mm").minutes() >= moment(this.state.time2, "HH:mm").minutes()) ){
+        if ((moment(this.state.time1, "HH:mm").hours() === moment(this.state.time2, "HH:mm").hours()) && (moment(this.state.time1, "HH:mm").minutes() >= moment(this.state.time2, "HH:mm").minutes())) {
             errors.time = "inValid time";
         }
 
-            return { errors, isValid: isEmpty(errors) };
+        return { errors, isValid: isEmpty(errors) };
+    }
+
+    resetTeachersList() {
+        let l = this.state.teachers;
+        l.map(t => { t.checked = false; t.isPresent = false; return t; })
+        this.setState({ teachers: l });
     }
 
 
@@ -176,4 +206,12 @@ class AdminAbsencesOfTeachers extends Component {
     }
 }
 
-export default AdminAbsencesOfTeachers;
+function mapDispatchToProps(dispatch) {
+    return {
+        newlp: bindActionCreators(addListPresenceAction, dispatch),
+        getAllTeachers: bindActionCreators(getAllTeachersAction, dispatch),
+        logout: bindActionCreators(logout, dispatch),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(AdminAbsencesOfTeachers);
