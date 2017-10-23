@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import setAuthorizationToken from '../axiosAuthToken';
 
 export function setCurrentUserAction(data) {
     return {
@@ -24,6 +24,7 @@ export function signUpAction(data) {
 
 export function logout(){
     localStorage.removeItem('jwtoken');
+    setAuthorizationToken();
     return {
         type: 'LOGOUT_ACTION'
     }

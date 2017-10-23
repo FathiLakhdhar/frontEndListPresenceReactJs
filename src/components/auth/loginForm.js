@@ -6,7 +6,7 @@ import Validator from 'validator';
 import { isEmpty } from 'lodash';
 import {withRouter, Link} from 'react-router-dom';
 import jwt from 'jsonwebtoken';
-//import setAuthorizationToken from '../../axiosAuthToken';
+import setAuthorizationToken from '../../axiosAuthToken';
 class LoginForm extends Component {
 
 
@@ -37,7 +37,7 @@ class LoginForm extends Component {
                     const { token } = res.data;
                     //console.log(res.data);
                     localStorage.setItem('jwtoken', token);
-                    //setAuthorizationToken(token);
+                    setAuthorizationToken(token);
                     const user = jwt.decode(token);
                     this.props.setCurrentUserAction(user);
                     this.props.history.push('/');
