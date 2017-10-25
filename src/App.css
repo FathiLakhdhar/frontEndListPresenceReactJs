@@ -228,6 +228,11 @@ footer {
     width: 175px;
 }    
 
-.CalendarDay__selected, .CalendarDay__selected:active, .CalendarDay__selected:hover {
+.todo-input-group{
+    border: 1px solid #0399e6;
+    box-shadow: 0px 3px 5px 0px #607D8B;
+    margin-top: 10px;
+    z-index: 1000;
+}
 
-  } 
+
