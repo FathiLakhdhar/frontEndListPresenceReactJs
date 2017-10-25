@@ -1,5 +1,5 @@
 import axios from 'axios';
-import setAuthorizationToken from '../axiosAuthToken';
+import {setAuthorizationToken} from '../axiosConfig';
 
 export function setCurrentUserAction(data) {
     return {

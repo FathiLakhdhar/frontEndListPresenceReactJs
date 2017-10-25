@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { NavLink, Route, Switch } from 'react-router-dom';
 import AdminStatistics from './adminStatistics';
 import AdminAbsencesOfTeachers from './adminAbsencesOfTeachers';
+import AdminAbsencesOfWorkers from './adminAbsencesOfWorkers';
+import Todo from '../todo';
 
 class AdminPage extends Component {
     render() {
@@ -25,9 +27,10 @@ class AdminPage extends Component {
                      */}
                     <div className="col-md-8 col-xs-12">
                         <Switch>
-                            <Route path={`${match.url}/`} exact render={()=><h1>Please select a item</h1>} />
+                            <Route path={`${match.url}/`} exact render={()=><Todo></Todo>} />
                             <Route path={`${match.url}/statistics`} component={AdminStatistics} />
                             <Route path={`${match.url}/absencesofteachers`} component={AdminAbsencesOfTeachers} />
+                            <Route path={`${match.url}/absencesofworkers`} component={AdminAbsencesOfWorkers} />
                         </Switch>
                     </div>
                 </div>

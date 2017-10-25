@@ -3,10 +3,9 @@ import Layout from './components/layout';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import Store from './store';
-import axios from 'axios';
 import { setCurrentUserAction } from './actions/authAction';
 import jwt from 'jsonwebtoken';
-import setAuthorizationToken from './axiosAuthToken';
+import {setAuthorizationToken, setAxiosBaseUrl} from './axiosConfig';
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-datetime/css/react-datetime.css';
 import 'react-times/css/classic/default.css';
@@ -28,7 +27,7 @@ class App extends Component {
 
 
   configAxios() {
-    axios.defaults.baseURL = 'http://localhost:3030/';
+    setAxiosBaseUrl();
     setAuthorizationToken(localStorage.getItem('jwtoken'));
   }
 

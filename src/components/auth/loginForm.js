@@ -6,7 +6,7 @@ import Validator from 'validator';
 import { isEmpty } from 'lodash';
 import {withRouter, Link} from 'react-router-dom';
 import jwt from 'jsonwebtoken';
-import setAuthorizationToken from '../../axiosAuthToken';
+import {setAuthorizationToken} from '../../axiosConfig';
 class LoginForm extends Component {
 
 
@@ -42,7 +42,7 @@ class LoginForm extends Component {
                     this.props.setCurrentUserAction(user);
                     this.props.history.push('/');
                 }, (error) => {
-                    const { errors } = error.response.data;
+                    const  errors  = (error.response)? error.response.data.errors : {form:'error connection'};
                     console.log(error);
                     this.setState({ errors });
                 }

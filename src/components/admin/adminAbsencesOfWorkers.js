@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 
-class AdminAbsencesOfTeachers extends Component {
+class AdminAbsencesOfWorkers extends Component {
     constructor() {
         super();
         this.state = {
@@ -19,20 +19,20 @@ class AdminAbsencesOfTeachers extends Component {
             time1: moment().format("HH:mm"),
             time2: moment().add(1, 'hours').format("HH:mm"),
             focused: null,
-            teachers: [],
+            workers: [],
         }
     }
 
     componentDidMount(){
-        this.props.getUsersByRole('ROLE_TEACHER')
+        this.props.getUsersByRole('ROLE_WORKER')
         .then(result => {
-            let teachers = result.data
-            teachers.map(function(t) {
+            let workers = result.data
+            workers.map(function(t) {
                 t.checked = false;
                 t.isPresent = false;
                 return t;
             });
-            this.setState({ teachers })
+            this.setState({ workers })
         })
         .catch(e => console.log(e));
     }
@@ -50,11 +50,12 @@ class AdminAbsencesOfTeachers extends Component {
             this.props.newlp(data).then(res => {
                 console.log(res.data);
                 if (res.data.success) {
-                    this.resetTeachersList();
+                    this.resetworkersList();
                 }
             }).catch(e => {
                 if (e.response)
                     console.log(e.response.data);
+                
             });
 
         } else {
@@ -64,7 +65,7 @@ class AdminAbsencesOfTeachers extends Component {
 
     }
 
-    filterByChecked() { return this.state.teachers.filter(obj => obj.checked); }
+    filterByChecked() { return this.state.workers.filter(obj => obj.checked); }
 
     isValid(list) {
         var errors = {};
@@ -83,30 +84,30 @@ class AdminAbsencesOfTeachers extends Component {
         return { errors, isValid: isEmpty(errors) };
     }
 
-    resetTeachersList() {
-        let l = this.state.teachers;
+    resetworkersList() {
+        let l = this.state.workers;
         l.map(t => { t.checked = false; t.isPresent = false; return t; })
-        this.setState({ teachers: l });
+        this.setState({ workers: l });
     }
 
 
     HandleClick(t, index) {
         //console.log(t);
         t.isPresent = !t.isPresent;
-        var { teachers } = this.state;
-        teachers[index].isPresent = t.isPresent
+        var { workers } = this.state;
+        workers[index].isPresent = t.isPresent
         this.setState({
-            teachers
+            workers
         })
     }
 
     HandleChechbox(t, index) {
         t.checked = !t.checked;
-        var { teachers } = this.state;
-        teachers[index].checked = t.checked;
-        teachers[index].isPresent = false;
+        var { workers } = this.state;
+        workers[index].checked = t.checked;
+        workers[index].isPresent = false;
         this.setState({
-            teachers
+            workers
         })
     }
 
@@ -115,7 +116,7 @@ class AdminAbsencesOfTeachers extends Component {
 
         var { errors } = this.state;
 
-        var ListTeachers = this.state.teachers.map((t, index) =>
+        var Listworkers = this.state.workers.map((t, index) =>
             <tr key={t.id} >
                 <td><input onChange={this.HandleChechbox.bind(this, t, index)} type="checkbox" className="" checked={t.checked} /></td>
                 <td>{t.id}</td>
@@ -143,7 +144,7 @@ class AdminAbsencesOfTeachers extends Component {
 
         return (
             <div>
-                <LpTitle title='Absences Of Teachers'></LpTitle>
+                <LpTitle title='Absences Of workers'></LpTitle>
                 <p>Dictas principes pri ea. Ex vim soluta accusam, per in illum liberavisse. Eum viderer saperet adversarium
                     id, erat mazim te est. Adhuc hendrerit disputando duo eu, sed fugit corrumpit efficiantur ex. Eum etiam
                     iudico gubergren eu.</p>
@@ -162,7 +163,7 @@ class AdminAbsencesOfTeachers extends Component {
                     </thead>
 
                     <tbody>
-                        {ListTeachers}
+                        {Listworkers}
                     </tbody>
                 </table>
 
@@ -211,4 +212,4 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(null, mapDispatchToProps)(AdminAbsencesOfTeachers);
+export default connect(null, mapDispatchToProps)(AdminAbsencesOfWorkers);
