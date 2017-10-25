@@ -41,7 +41,7 @@ class Todo extends Component {
         let { todos } = this.props;
         let todosItems = (
             <ul className="list-group">
-                {todos.map((todo, i) => <li style={todo.complited ? { textDecoration: 'line-through' } : {}} className="list-group-item" key={i}><input type='checkbox' checked={todo.complited} onClick={this.HandleTodoSelect.bind(this, todo.id)} /> {todo.text}</li>)}
+                {todos.map((todo, i) => <li onClick={this.HandleTodoSelect.bind(this, todo.id)} style={todo.complited ? { textDecoration: 'line-through' } : {}} className="list-group-item" key={i}><input type='checkbox' checked={todo.complited} /> {todo.text}</li>)}
             </ul>
         );
         return (
@@ -50,7 +50,7 @@ class Todo extends Component {
                 <div>
                     <form className="form-inline" onSubmit={this.HandleSubmit.bind(this)}>
                         <div className='form-group'>
-                            <div className="input-group">
+                            <div className="input-group todo-input-group">
                                 <div className="input-group-addon">
                                     <input type='checkbox'  checked={this.state.checked} onClick={this.HandleSelectAll.bind(this)} />
                                 </div>
