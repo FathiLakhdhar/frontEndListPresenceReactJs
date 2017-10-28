@@ -4,7 +4,7 @@ var todos = [
     { id: 2, complited: false, text: 'Vestibulum auctor dapibus neque.' },
 ];
 export default function (state = todos, action) {
-    const { type, payload, id, toggleAll } = action;
+    const { type, payload, id, toggleAll, ids } = action;
     switch (type) {
         case 'ADD_TODO':
             return [
@@ -15,6 +15,8 @@ export default function (state = todos, action) {
             return state.map((todo) => (todo.id === id) ? { ...todo, complited: !todo.complited } : todo);
         case 'TOGGLE_ALL_TODO':
             return state.map(todo => { return { ...todo, complited: toggleAll } });
+        case 'ARCHIVE_TODOS':
+            return state.filter((todo) => !ids.includes(todo.id) );
         default:
             return state;
     }
