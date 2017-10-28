@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import jwt from 'jsonwebtoken';
 
-const InitialUser = localStorage.getItem("jwtoken") ? {isAuthenticated: true, user: jwt.decode(localStorage.getItem("jwtoken"))} : {isAuthenticated: false,user: {}}
+let InitialUser = localStorage.getItem("jwtoken") ? { isAuthenticated: true, user: jwt.decode(localStorage.getItem("jwtoken")) } : { isAuthenticated: false, user: {} }
 
 
 export default function (state = InitialUser, action) {
@@ -14,7 +14,10 @@ export default function (state = InitialUser, action) {
                 user: payload
             };
         case 'LOGOUT_ACTION':
-            return InitialUser;
+            return {
+                isAuthenticated: false,
+                user: {}
+            };
         default:
             return state;
     }
