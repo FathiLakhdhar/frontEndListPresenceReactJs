@@ -19,3 +19,11 @@ export function toggleAllTodo(toggleAll){
         toggleAll 
     }
 }
+
+export function archiveTodos(ids){
+    //toggleAll : true or false
+    return {
+        type: 'ARCHIVE_TODOS',
+        ids
+    }
+}
