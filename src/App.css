@@ -7,6 +7,8 @@
 body {
     font-family: monospace;
     font-size: 16px;
+    position: relative;
+    min-height: 700px;
 }
 
 .navbar-brand>img {
@@ -92,10 +94,10 @@ body {
 }
 
 footer {
-    margin-top: 10px;
-    /*position: absolute;*/
-    width: 100%;
+    position: absolute;
     bottom: 0px;
+    margin-top: 10px;
+    width: 100%;
 }
 
 .flash {
@@ -235,4 +237,21 @@ footer {
     z-index: 1000;
 }
 
+
+.error-container{
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    text-align: center;
+    justify-content: center;
+}
+.error-container>h1{
+    font-size: 170px;
+    font-weight: bold;
+    color: #e85d6a;
+}
+
+.error-container>h3{
+    color: #e68992;
+}
 
