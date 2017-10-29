@@ -6,12 +6,15 @@ import Store from './store';
 import { setCurrentUserAction } from './actions/authAction';
 import jwt from 'jsonwebtoken';
 import {setAuthorizationToken, setAxiosBaseUrl} from './axiosConfig';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-datetime/css/react-datetime.css';
 import 'react-times/css/classic/default.css';
-import 'react-times/css/material/default.css';
+//import 'react-times/css/material/default.css';
+import 'ionicons/dist/css/ionicons.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 import './App.css';
-
+import 'bootstrap/dist/js/bootstrap.min.js';
 
 
 class App extends Component {
